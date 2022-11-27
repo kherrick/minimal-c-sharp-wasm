@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+  <title>minimal-c-sharp-wasm</title>
+  <base href="/" />
+</head>
+
+<body>
+  <style>
+    .column {
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    input[type="text"] {
+      border-radius: 5px;
+      border: 1px outset grey;
+      font-size: 2rem;
+      margin: 3px;
+      min-width: 155px;
+      padding: 1rem;
+      width: 100%;
+    }
+
+    input[type="button"] {
+      background-color: darkblue;
+      border-radius: 5px;
+      border: 1px solid white;
+      color: white;
+      font-size: 2rem;
+      height: 5rem;
+      margin: 0;
+      min-width: 65px;
+      width: 100%;
+    }
+
+    input[value="c"] {
+      max-width: 25%;
+    }
+  </style>
+  <div class="column">
+    <div class="row">
+      <input type="text" id="result" /><input type="button" value="c" />
+    </div>
+    <div class="row">
+      <input type="button" value="1" /><input type="button" value="2" /><input type="button" value="3" /><input
+        type="button" value="/" />
+    </div>
+    <div class="row">
+      <input type="button" value="4" /><input type="button" value="5" /><input type="button" value="6" /><input
+        type="button" value="*" />
+    </div>
+    <div class="row">
+      <input type="button" value="7" /><input type="button" value="8" /><input type="button" value="9" /><input
+        type="button" value="-" />
+    </div>
+    <div class="row">
+      <input type="button" value="0" /><input type="button" value="." /><input type="button" value="=" /><input
+        type="button" value="+" />
+    </div>
+  </div>
+  <script type="module">
+    import {
+      clear,
+      handleCalculatorValue,
+    } from "./dist/minimal-c-sharp-wasm/app.js";
+
+    // setup event listeners
+    document.querySelectorAll("input[type=button").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        // handle only click events using the mouse or touchscreen
+        if (!e.detail) {
+          return;
+        }
+
+        handleCalculatorValue(el.value);
+      });
+
+      el.addEventListener("keydown", (e) => {
+        let val = e.key;
+
+        // override val if spacebar is used
+        if (e.key === " ") {
+          val = el.value;
+        }
+
+        handleCalculatorValue(val);
+      });
+    });
+
+    /* prevent modifying the results directly */
+    document
+      .getElementById("result")
+      .addEventListener("click", (e) => e.preventDefault());
+    document
+      .getElementById("result")
+      .addEventListener("keydown", (e) => e.preventDefault());
+
+    /* clear the calculator on first load */
+    clear();
+
+    /* focus clear button */
+    document.querySelector("[value='c']").focus();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "minimal-c-sharp-wasm",
+  "version": "0.0.1",
+  "description": "minimal usage of c# in the browser",
+  "module": "./dist/minimal-c-sharp-wasm/main.js",
+  "scripts": {
+    "build": "npm run clean && cd ./src/minimal-c-sharp-wasm && dotnet build",
+    "clean": "rimraf ./dist ./src/minimal-c-sharp-wasm/bin ./src/minimal-c-sharp-wasm/obj",
+    "serve": "npx serve -s .",
+    "start": "npm run build && npm run serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kherrick/minimal-c-sharp-wasm.git"
+  },
+  "author": "Karl Herrick",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/kherrick/minimal-c-sharp-wasm#readme",
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "serve": "^14.1.2"
+  }
+}
