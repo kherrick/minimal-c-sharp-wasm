@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Runtime.InteropServices.JavaScript;
 
 public partial class Calculator
@@ -7,24 +8,36 @@ public partial class Calculator
   [JSExport]
   internal static string add(string first, string second)
   {
-    return (Decimal.Parse(first) + Decimal.Parse(second)).ToString();
+    Decimal firstNumber = Decimal.Parse(first, NumberStyles.Float);
+    Decimal secondNumber = Decimal.Parse(second, NumberStyles.Float);
+
+    return (firstNumber + secondNumber).ToString();
   }
 
   [JSExport]
   internal static string subtract(string first, string second)
   {
-    return (Decimal.Parse(first) - Decimal.Parse(second)).ToString();
+    Decimal firstNumber = Decimal.Parse(first, NumberStyles.Float);
+    Decimal secondNumber = Decimal.Parse(second, NumberStyles.Float);
+
+    return (firstNumber - secondNumber).ToString();
   }
 
   [JSExport]
   internal static string multiply(string first, string second)
   {
-    return (Decimal.Parse(first) * Decimal.Parse(second)).ToString();
+    Decimal firstNumber = Decimal.Parse(first, NumberStyles.Float);
+    Decimal secondNumber = Decimal.Parse(second, NumberStyles.Float);
+
+    return (firstNumber * secondNumber).ToString();
   }
 
   [JSExport]
   internal static string divide(string first, string second)
   {
-    return (Decimal.Parse(first) / Decimal.Parse(second)).ToString();
+    Decimal firstNumber = Decimal.Parse(first, NumberStyles.Float);
+    Decimal secondNumber = Decimal.Parse(second, NumberStyles.Float);
+
+    return (firstNumber / secondNumber).ToString();
   }
 }

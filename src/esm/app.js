@@ -1,6 +1,13 @@
 import { clear } from "./utils.js";
 import { getAssemblyExports } from "./main.js";
-import { handleCalculatorButtons, handleCalculatorValue, handleKeydownAndPaste } from "./eventHandlers.js";
+import {
+  handleCalculatorButtons,
+  handleCalculatorValue,
+  handleKeydownAndPaste,
+} from "./eventHandlers.js";
+
+// result element
+const result = document.getElementById("result");
 
 // setup model for calculator
 const model = {
@@ -20,26 +27,34 @@ getAssemblyExports().then((assemblyExports) => {
 });
 
 // clear the calculator on first load
-clear(model);
+clear(model, result);
 
 // setup event handlers for paste and keydown
-document.body.addEventListener("keydown", (e) => handleKeydownAndPaste(Calculator, model, e));
-document.body.addEventListener("paste", (e) => handleKeydownAndPaste(Calculator, model, e));
-
-// setup event handlers for clicking buttons
-document.querySelectorAll("input[type=button")
-  .forEach((el) => {
-    // need both click and keydown to differentiate between space and enter
-    el.addEventListener("click", (e) => handleCalculatorButtons(Calculator, model, e, el));
-    el.addEventListener("keydown", (e) => handleCalculatorButtons(Calculator, model, e, el));
-  });
-
-// prevent modifying the results directly
-document.getElementById("result").addEventListener("click", (e) => e.preventDefault());
-document.getElementById("result").addEventListener("keydown", (e) => {
-  if (e.key !== 'Tab') {
+document.body.addEventListener("keydown", (e) =>
+  handleKeydownAndPaste(Calculator, model, result, e)
+);
+result.addEventListener("keydown", (e) => {
+  // prevent modifying the results directly
+  if (e.key !== "Tab") {
     e.preventDefault();
   }
+});
+result.addEventListener("beforeinput", (e) => {
+  // check insertFromPaste using beforeinput
+  if (e.inputType === "insertFromPaste") {
+    handleKeydownAndPaste(Calculator, model, result, e);
+  }
+});
+
+// setup event handlers for clicking buttons
+document.querySelectorAll("input[type=button]").forEach((button) => {
+  // need both click and keydown to differentiate between space and enter
+  button.addEventListener("click", (e) =>
+    handleCalculatorButtons(Calculator, model, result, e, button)
+  );
+  button.addEventListener("keydown", (e) =>
+    handleCalculatorButtons(Calculator, model, result, e, button)
+  );
 });
 
 // focus clear button

@@ -8,12 +8,23 @@
     />
     <title>minimal-c-sharp-wasm</title>
     <base href="/" />
+    <link
+      href="data:image/x-icon;base64,AAABAAEAAQECAAEAAQA4AAAAFgAAACgAAAABAAAAAgAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEAAQECAAEAAQA4AAAAFgAAACgAAAABAAAAAgAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      rel="icon"
+      type="image/x-icon"
+    />
     <link href="./dist/minimal-c-sharp-wasm/styles.css" rel="stylesheet" />
   </head>
   <body>
+    <dialog>
+      <h1></h1>
+      <form method="dialog">
+        <button>OK</button>
+      </form>
+    </dialog>
     <div class="column">
       <div class="row">
-        <input type="text" id="result" />
+        <input type="text" inputMode="none" id="result" />
         <input type="button" value="c" />
       </div>
       <div class="row">
@@ -41,6 +52,8 @@
         <input type="button" value="+" />
       </div>
     </div>
-    <script type="module" src="./dist/minimal-c-sharp-wasm/app.js"></script>
+    <script type="module">
+      import "./dist/minimal-c-sharp-wasm/app.js";
+    </script>
   </body>
 </html>

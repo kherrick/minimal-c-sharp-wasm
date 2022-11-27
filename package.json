@@ -4,10 +4,11 @@
   "description": "minimal usage of c# in the browser",
   "module": "./dist/minimal-c-sharp-wasm/main.js",
   "scripts": {
-    "build": "npm run clean && cd ./src/minimal-c-sharp-wasm && dotnet build",
+    "build": "cd ./src/minimal-c-sharp-wasm && dotnet build",
     "clean": "rimraf ./dist ./src/minimal-c-sharp-wasm/bin ./src/minimal-c-sharp-wasm/obj",
-    "serve": "npx serve -s .",
-    "start": "npm run build && npm run serve"
+    "serve": "npx serve -s . -l tcp://0.0.0.0:3000",
+    "start": "concurrently \"npm run build && npm run serve\"",
+    "start:watch": "npm run clean && nodemon --ext cs,css,js --watch src --ignore src/**/bin/** --ignore src/**/obj/**"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/kherrick/minimal-c-sharp-wasm#readme",
   "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
     "rimraf": "^3.0.2",
     "serve": "^14.1.2"
   }

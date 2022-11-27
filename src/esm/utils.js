@@ -1,102 +1,200 @@
-// clear the display and calculator model
-export const clear = (calculator) => {
-  calculator.numbers.first = "";
-  calculator.numbers.second = "";
-  calculator.operation = "";
+// toggle dialog
+const dialog = document.querySelector("dialog");
+export const closeDialog = () => dialog.removeAttribute("open");
+export const openDialog = (message = null) => {
+  dialog.setAttribute("open", "open");
+  dialog.querySelector("h1").textContent = message;
+};
 
-  document.getElementById("result").value = "";
+// clear the display and calculator model
+export const clear = (model, result, clearModelOnly = false) => {
+  model.numbers.first = "";
+  model.numbers.second = "";
+  model.operation = "";
+
+  if (clearModelOnly) {
+    return;
+  }
+
+  result.value = "";
 };
 
 // regex used to determine if the button is a calculator operation
 export const isOperation = (val) => val.match(/[+\-*/]/) !== null;
 
 // determine next steps for the calculator
-export const resolveOperations = (Calculator, calculator, val) => {
+export const resolveOperations = (Calculator, model, result, val) => {
+  const isOperationValue = isOperation(val);
+
+  // prevent leading with an operation
+  if (isOperationValue && !model.numbers.first) {
+    return;
+  }
+
   // prevent two decimals
-  if (document.getElementById("result").value.includes(".") && val === ".") {
+  if (result.value.includes(".") && val === ".") {
     return;
   }
 
   // handle "c" key and escape key
   if (val === "c" || val === "Escape") {
-    clear(calculator);
+    clear(model, result);
 
     return;
   }
 
   // handle equals and enter key
   if (val === "=" || val === "Enter") {
-    solve(Calculator, calculator);
+    // do not solve when the dialog is open
+    if (dialog.getAttribute("open")) {
+      return;
+    }
+
+    solve(Calculator, model, result);
 
     return;
   }
 
+  // handle "Error" and "NaN" value
+  if (result.value === "Error" || result.value === "NaN") {
+    clear(model, result);
+  }
+
   // handle operation and number1
-  if (!calculator.operation) {
+  if (!model.operation) {
     // handle operation
-    if (isOperation(val)) {
-      calculator.operation = val;
-      document.getElementById("result").value = val;
+    if (isOperationValue) {
+      model.operation = val;
+      result.value = val;
 
       return;
     }
 
+    // do not allow a number with length longer than sixteen for number1
+    if (result.value.length === 16) {
+      return;
+    }
+
     // handle number1
-    calculator.numbers.first += val;
-    document.getElementById("result").value += val;
+    model.numbers.first += val;
+    result.value += val;
 
     return;
   } else {
     // prevent changing operation before solving
-    if (isOperation(val)) {
+    if (isOperationValue) {
       return;
     }
   }
 
   // handle first time seeing number2
-  if (!calculator.numbers.second) {
-    calculator.numbers.second = val;
-    document.getElementById("result").value = val;
+  if (!model.numbers.second) {
+    model.numbers.second = val;
+    result.value = val;
 
     return;
   }
 
+  // do not allow to divide by more than a number with length of nine
+  if (model.operation === "/" && result.value.length === 9) {
+    return;
+  }
+
+  // do not allow a number with length longer than sixteen for number2
+  if (result.value.length === 16) {
+    return;
+  }
+
   // handle appending to number2
-  calculator.numbers.second += val;
-  document.getElementById("result").value += val;
+  model.numbers.second += val;
+  result.value += val;
 };
 
 // solve the stored equation and set the result
-export const solve = (Calculator, calculator) => {
-  let result = null;
+export const solve = (Calculator, model, result) => {
+  let solution = null;
 
-  const number1 = calculator.numbers.first;
-  const number2 = calculator.numbers.second;
+  const number1 = model.numbers.first;
+  const number2 = model.numbers.second;
 
-  // determine operation
-  if (calculator.operation === "+") {
-    result = Calculator.add(number1, number2);
+  if (Calculator === null) {
+    openDialog("Required dependencies are still loading...");
+
+    setTimeout(() => {
+      dialog.querySelector("button").focus();
+    }, 0);
+
+    return;
   }
 
-  if (calculator.operation === "-") {
-    result = Calculator.subtract(number1, number2);
+  try {
+    // determine operation
+    if (model.operation === "+") {
+      solution = Calculator.add(number1, number2);
+    }
+
+    if (model.operation === "-") {
+      solution = Calculator.subtract(number1, number2);
+    }
+
+    if (model.operation === "*") {
+      solution = Calculator.multiply(number1, number2);
+    }
+
+    if (model.operation === "/") {
+      solution = Calculator.divide(number1, number2);
+    }
+  } catch (error) {
+    if (String(error).includes("Attempted to divide by zero")) {
+      result.value = "NaN";
+
+      // clear just calculator model
+      clear(model, result, true);
+
+      return;
+    }
+
+    result.value = "Error";
+
+    // clear just calculator model
+    clear(model, result, true);
   }
 
-  if (calculator.operation === "*") {
-    result = Calculator.multiply(number1, number2);
-  }
-
-  if (calculator.operation === "/") {
-    result = Calculator.divide(number1, number2);
-  }
-
-  // display result
-  if (result !== null) {
+  // try to display the solution
+  if (solution !== null) {
     // clear display and model
-    clear(calculator);
+    clear(model, result);
 
-    // set result as first number
-    calculator.numbers.first = result;
-    document.getElementById("result").value = result;
+    // trim trailing 0's
+    let answer = parseFloat(solution).toString();
+
+    // error using scientific notation
+    if (answer.includes("e-") || answer.includes("e+")) {
+      result.value = "Error";
+
+      // clear just calculator model
+      clear(model, result, true);
+
+      return;
+    }
+
+    // trim decimals
+    if (answer.includes(".") && answer.length > 16) {
+      answer = answer.slice(0, 16);
+    }
+
+    // error on length longer than sixteen
+    if (answer.length > 16) {
+      result.value = "Error";
+
+      // clear just calculator model
+      clear(model, result, true);
+
+      return;
+    }
+
+    // set solution as first number
+    model.numbers.first = answer;
+    result.value = answer;
   }
 };
