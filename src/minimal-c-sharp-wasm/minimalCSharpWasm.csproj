@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
-    <WasmMainJSPath>main.js</WasmMainJSPath>
+    <WasmMainJSPath>../esm/main.js</WasmMainJSPath>
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WasmAppDir>../../dist/minimal-c-sharp-wasm</WasmAppDir>
@@ -11,7 +11,9 @@
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="../esm/app.js" />
-    <WasmExtraFilesToDeploy Include="main.js" />
-    <WasmExtraFilesToDeploy Include="package.json" />
+    <WasmExtraFilesToDeploy Include="../esm/eventHandlers.js" />
+    <WasmExtraFilesToDeploy Include="../esm/main.js" />
+    <WasmExtraFilesToDeploy Include="../esm/utils.js" />
+    <WasmExtraFilesToDeploy Include="../styles.css" />
   </ItemGroup>
 </Project>
