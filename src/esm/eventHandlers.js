@@ -36,9 +36,9 @@ export const handleKeydownAndPaste = (Calculator, model, e) => {
     val = document.getElementById("result").value;
   }
 
-  // override val if spacebar is used
+  // prevent spacebar when a calculator button is not selected
   if (e.key === " ") {
-    val = "c";
+    return
   }
 
   handleCalculatorValue(Calculator, model, val);
@@ -46,8 +46,8 @@ export const handleKeydownAndPaste = (Calculator, model, e) => {
 
 // event handler for calculator buttons
 export const handleCalculatorButtons = (Calculator, model, e, el) => {
-  // handle only click events using the mouse or touchscreen
-  if (!e?.detail) {
+  // handle only clicks without detail (0) that identify as a space key
+  if (!e?.detail && (e?.key !== ' ')) {
     return;
   }
 

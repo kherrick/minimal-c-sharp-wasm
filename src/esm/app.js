@@ -11,28 +11,36 @@ const model = {
   operation: "",
 };
 
-/* define placeholder for instance of C# calculator */
+// define placeholder for instance of C# calculator
 let Calculator = null;
 
-/* set C# calculator */
+// set C# calculator
 getAssemblyExports().then((assemblyExports) => {
   Calculator = assemblyExports.Calculator;
 });
 
-/* clear the calculator on first load */
+// clear the calculator on first load
 clear(model);
 
-/* setup event handlers for paste and keydown */
+// setup event handlers for paste and keydown
 document.body.addEventListener("keydown", (e) => handleKeydownAndPaste(Calculator, model, e));
 document.body.addEventListener("paste", (e) => handleKeydownAndPaste(Calculator, model, e));
 
-/* setup event handlers for clicking buttons */
+// setup event handlers for clicking buttons
 document.querySelectorAll("input[type=button")
-  .forEach((el) => el.addEventListener("click", (e) => handleCalculatorButtons(Calculator, model, e, el)));
+  .forEach((el) => {
+    // need both click and keydown to differentiate between space and enter
+    el.addEventListener("click", (e) => handleCalculatorButtons(Calculator, model, e, el));
+    el.addEventListener("keydown", (e) => handleCalculatorButtons(Calculator, model, e, el));
+  });
 
-/* prevent modifying the results directly */
+// prevent modifying the results directly
 document.getElementById("result").addEventListener("click", (e) => e.preventDefault());
-document.getElementById("result").addEventListener("keydown", (e) => e.preventDefault());
+document.getElementById("result").addEventListener("keydown", (e) => {
+  if (e.key !== 'Tab') {
+    e.preventDefault();
+  }
+});
 
-/* focus clear button */
+// focus clear button
 document.querySelector("[value='c']").focus();
