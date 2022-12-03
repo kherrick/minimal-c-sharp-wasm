@@ -4,3 +4,5 @@
 **/node_modules/**
 **/obj/**
 package-lock.json
+service-worker.js**
+workbox-**.js**
