@@ -5,9 +5,9 @@
   "display": "standalone",
   "name": "Minimal C# Wasm",
   "orientation": "any",
-  "scope": "/",
+  "scope": "/minimal-c-sharp-wasm/",
   "short_name": "Minimal C# Wasm",
-  "start_url": "/",
+  "start_url": "/minimal-c-sharp-wasm/",
   "theme_color": "#ffffff",
   "icons": [
     {

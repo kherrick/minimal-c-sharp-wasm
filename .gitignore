@@ -1,8 +1,8 @@
 **/.vscode/**
 **/bin/**
-**/dist/**
+#**/dist/**
 **/node_modules/**
 **/obj/**
 package-lock.json
-service-worker.js**
-workbox-**.js**
+#service-worker.js**
+#workbox-**.js**
