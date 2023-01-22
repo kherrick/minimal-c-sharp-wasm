@@ -1,6 +1,6 @@
 {
   "mainAssemblyName": "minimalCSharpWasm.dll",
-  "assemblyRootFolder": "managed",
+  "assemblyRootFolder": "assets/minimal-c-sharp-wasm/managed",
   "debugLevel": -1,
   "assets": [
     {
@@ -686,26 +686,26 @@
     {
       "virtualPath": "runtimeconfig.bin",
       "behavior": "vfs",
-      "name": "supportFiles/0_runtimeconfig.bin"
+      "name": "assets/minimal-c-sharp-wasm/supportFiles/0_runtimeconfig.bin"
     },
     {
       "virtualPath": "dotnet.js.symbols",
       "behavior": "vfs",
-      "name": "supportFiles/1_dotnet.js.symbols"
+      "name": "assets/minimal-c-sharp-wasm/supportFiles/1_dotnet.js.symbols"
     },
     {
       "loadRemote": false,
       "behavior": "icu",
-      "name": "icudt.dat"
+      "name": "assets/minimal-c-sharp-wasm/icudt.dat"
     },
     {
       "virtualPath": "/usr/share/zoneinfo/",
       "behavior": "vfs",
-      "name": "dotnet.timezones.blat"
+      "name": "assets/minimal-c-sharp-wasm/dotnet.timezones.blat"
     },
     {
       "behavior": "dotnetwasm",
-      "name": "dotnet.wasm"
+      "name": "assets/minimal-c-sharp-wasm/dotnet.wasm"
     }
   ],
   "remoteSources": [],
